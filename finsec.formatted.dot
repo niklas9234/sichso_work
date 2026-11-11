@@ -1,0 +1,28 @@
+digraph FinSec {
+	graph [rankdir=LR];
+	node [label="\N",
+		shape=box
+	];
+	subgraph cluster_finsec {
+		graph [color=steelblue,
+			label="FinSec – Systemgrenze"
+		];
+		frontend	[label=Frontend];
+		backend	[label=Backend];
+		frontend -> backend	[label=F02];
+		datenbank	[label=Datenbank,
+			shape=cylinder];
+		backend -> datenbank	[label=F03];
+	}
+	kunden	[label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5">
+            <TR><TD ALIGN="CENTER">Kund:innen</TD></TR>
+            <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="9">C01</FONT></TD></TR>
+        </TABLE>
+    >];
+	kunden -> frontend	[label=F01];
+	banken	[label=Banken];
+	backend -> banken	[id=F04,
+		label=F04,
+		tooltip="Kontodatenabruf bei der Bank"];
+}

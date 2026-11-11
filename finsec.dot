@@ -1,0 +1,66 @@
+digraph FinSec {
+    rankdir=LR;
+    node [shape=box];
+
+    customers [
+    shape=box,
+    label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5">
+            <TR><TD ALIGN="CENTER">Customers</TD></TR>
+            <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="9">C01</FONT></TD></TR>
+        </TABLE>
+    >
+    ];
+
+    frontend [
+    shape=box,
+    label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5">
+            <TR><TD ALIGN="CENTER">Frontend</TD></TR>
+            <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="9">C01</FONT></TD></TR>
+        </TABLE>
+    >
+    ];
+
+    backend [
+    shape=box,
+    label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5">
+            <TR><TD ALIGN="CENTER">Backend</TD></TR>
+            <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="9">C01</FONT></TD></TR>
+        </TABLE>
+    >
+    ];
+
+    database [
+    shape=cylinder,
+    label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2">
+            <TR><TD ALIGN="CENTER">Database</TD></TR>
+            <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="9">C01</FONT></TD></TR>
+        </TABLE>
+    >
+    ];
+
+
+
+
+bank_n      [label="Bank 1"];
+bank_2      [label="Bank 2"];
+bank_n      [label="Bank n"];
+
+    subgraph cluster_finsec {
+        label="FinSec – Systemgrenze";
+        color=steelblue;
+
+        frontend -> backend [label="F02"];
+        backend -> database [label="F03"];
+    }
+
+    customers -> frontend [label="F01"];
+    backend -> banken [
+        id="F04",
+        label="F04",
+        tooltip="Kontodatenabruf bei der Bank"
+    ];
+}
