@@ -1,28 +1,168 @@
 digraph FinSec {
-	graph [rankdir=LR];
-	node [label="\N",
-		shape=box
+	graph [bgcolor=white,
+		compound=true,
+		fontname="DejaVu Sans",
+		fontsize=18,
+		label="FinSec · System Context",
+		labelloc=t,
+		nodesep=0.65,
+		pad=0.35,
+		rankdir=TB,
+		ranksep=0.8
 	];
-	subgraph cluster_finsec {
-		graph [color=steelblue,
-			label="FinSec – Systemgrenze"
-		];
-		frontend	[label=Frontend];
-		backend	[label=Backend];
-		frontend -> backend	[label=F02];
-		datenbank	[label=Datenbank,
-			shape=cylinder];
-		backend -> datenbank	[label=F03];
+	node [color="#64748b",
+		fillcolor="#f1f5f9",
+		fontname="DejaVu Sans",
+		fontsize=12,
+		label="\N",
+		margin="0.22,0.16",
+		shape=box,
+		style="rounded,filled",
+		target=_top
+	];
+	edge [arrowsize=0.7,
+		color="#475569",
+		dir=both,
+		fontname="DejaVu Sans",
+		fontsize=10,
+		target=_top
+	];
+	{
+		graph [rank=same];
+		C08	[URL="System%20Context.html#description-C08",
+			id=C08,
+			label="Bank 1\nC08",
+			tooltip="Bank 1 – Beschreibung"];
+		C09	[URL="System%20Context.html#description-C09",
+			id=C09,
+			label="Bank 2\nC09",
+			tooltip="Bank 2 – Beschreibung"];
+		C10	[URL="System%20Context.html#description-C10",
+			id=C10,
+			label="Bank n\nC10",
+			tooltip="Bank n – Beschreibung"];
 	}
-	kunden	[label=<
-        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5">
-            <TR><TD ALIGN="CENTER">Kund:innen</TD></TR>
-            <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="9">C01</FONT></TD></TR>
-        </TABLE>
-    >];
-	kunden -> frontend	[label=F01];
-	banken	[label=Banken];
-	backend -> banken	[id=F04,
-		label=F04,
-		tooltip="Kontodatenabruf bei der Bank"];
+	subgraph cluster_responsibility {
+		graph [color="#d6a900",
+			fillcolor="#fff8cc",
+			label="FinSec-Verantwortung · einschließlich sicherer Verbindungen zu externen Parteien",
+			margin=24,
+			penwidth=2,
+			style="rounded,filled"
+		];
+		subgraph cluster_frontends {
+			graph [color="#94a3b8",
+				fillcolor="#ffffff",
+				label=Frontends
+			];
+			{
+				graph [rank=same];
+				C02	[URL="System%20Context.html#description-C02",
+					id=C02,
+					label="Web-Frontend\nC02",
+					tooltip="Web-Frontend – Beschreibung"];
+				C03	[URL="System%20Context.html#description-C03",
+					id=C03,
+					label="Mobile App\n(geplant)\nC03",
+					tooltip="Mobile App (geplant) – Beschreibung"];
+			}
+		}
+		subgraph cluster_backend {
+			graph [color="#94a3b8",
+				fillcolor="#ffffff",
+				label="Backend · drei funktionale Bereiche"
+			];
+			{
+				graph [rank=same];
+				C05	[URL="System%20Context.html#description-C05",
+					id=C05,
+					label="Finanzdatenverarbeitung\nC05",
+					tooltip="Finanzdatenverarbeitung – Beschreibung"];
+				C06	[URL="System%20Context.html#description-C06",
+					id=C06,
+					label="Bankanbindung\nC06",
+					tooltip="Bankanbindung – Beschreibung"];
+			}
+			C04	[URL="System%20Context.html#description-C04",
+				id=C04,
+				label="Anwendungslogik\nC04",
+				tooltip="Anwendungslogik – Beschreibung"];
+			C04 -> C05	[URL="System%20Context.html#description-F05",
+				id=F05,
+				label="F05 · Analyseauftrag & Auswertung",
+				tooltip="F05: Analyseauftrag & Auswertung"];
+			C04 -> C06	[URL="System%20Context.html#description-F06",
+				id=F06,
+				label="F06 · Bankauftrag & Ergebnis",
+				tooltip="F06: Bankauftrag & Ergebnis"];
+		}
+		C02 -> C04	[URL="System%20Context.html#description-F03",
+			id=F03,
+			label="F03 · Anfragen & Ergebnisse",
+			tooltip="F03: Anfragen & Ergebnisse"];
+		C03 -> C04	[URL="System%20Context.html#description-F04",
+			id=F04,
+			label="F04 · Anfragen & Ergebnisse",
+			tooltip="F04: Anfragen & Ergebnisse"];
+		C07	[URL="System%20Context.html#description-C07",
+			id=C07,
+			label="Datenbank\nC07",
+			shape=cylinder,
+			tooltip="Datenbank – Beschreibung"];
+		C04 -> C07	[URL="System%20Context.html#description-F07",
+			id=F07,
+			label="F07 · Lesen & Speichern",
+			tooltip="F07: Lesen & Speichern"];
+		C06 -> C07	[style=invis];
+		bank_link	[color="#d6a900",
+			label="",
+			shape=point,
+			width=0.03];
+		C06 -> bank_link	[dir=none];
+		C07 -> bank_link	[style=invis];
+		client_link	[color="#d6a900",
+			label="",
+			shape=point,
+			width=0.03];
+		client_link -> C02	[URL="System%20Context.html#description-F01",
+			id=F01,
+			label="F01 · Nutzung & Rückmeldungen",
+			tooltip="F01: Nutzung & Rückmeldungen"];
+		client_link -> C03	[URL="System%20Context.html#description-F02",
+			id=F02,
+			label="F02 · Nutzung & Rückmeldungen",
+			tooltip="F02: Nutzung & Rückmeldungen"];
+	}
+	C01	[URL="System%20Context.html#description-C01",
+		id=C01,
+		label="Kund:innen\nC01",
+		tooltip="Kund:innen – Beschreibung"];
+	C01 -> client_link	[color="#94a3b8",
+		dir=none];
+	C08 -> C09	[URL="System%20Context.html#description-F11",
+		color="#94a3b8",
+		constraint=false,
+		id=F11,
+		label="F11 · Datenaustausch / Transaktionen",
+		style=dashed,
+		tooltip="F11: Datenaustausch / Transaktionen"];
+	C09 -> C10	[URL="System%20Context.html#description-F12",
+		color="#94a3b8",
+		constraint=false,
+		id=F12,
+		label="F12 · Datenaustausch / Transaktionen",
+		style=dashed,
+		tooltip="F12: Datenaustausch / Transaktionen"];
+	bank_link -> C08	[URL="System%20Context.html#description-F08",
+		id=F08,
+		label="F08 · Kontoabruf & Zahlungsauftrag",
+		tooltip="F08: Kontoabruf & Zahlungsauftrag"];
+	bank_link -> C09	[URL="System%20Context.html#description-F09",
+		id=F09,
+		label="F09 · Kontoabruf & Zahlungsauftrag",
+		tooltip="F09: Kontoabruf & Zahlungsauftrag"];
+	bank_link -> C10	[URL="System%20Context.html#description-F10",
+		id=F10,
+		label="F10 · Kontoabruf & Zahlungsauftrag",
+		tooltip="F10: Kontoabruf & Zahlungsauftrag"];
 }
