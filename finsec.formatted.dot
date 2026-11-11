@@ -31,15 +31,15 @@ digraph FinSec {
 	];
 	{
 		graph [rank=same];
-		C08	[URL="System%20Context.md#C08",
+		C08	[URL="README.md#C08",
 			id=C08,
 			label="Bank 1\nC08",
 			tooltip="Bank 1 – Beschreibung"];
-		C09	[URL="System%20Context.md#C09",
+		C09	[URL="README.md#C09",
 			id=C09,
 			label="Bank 2\nC09",
 			tooltip="Bank 2 – Beschreibung"];
-		C10	[URL="System%20Context.md#C10",
+		C10	[URL="README.md#C10",
 			id=C10,
 			label="Bank n\nC10",
 			tooltip="Bank n – Beschreibung"];
@@ -54,11 +54,11 @@ digraph FinSec {
 		];
 		{
 			graph [rank=same];
-			C04	[URL="System%20Context.md#C04",
+			C04	[URL="README.md#C04",
 				id=C04,
 				label="Anwendungslogik\nC04",
 				tooltip="Anwendungslogik – Beschreibung"];
-			C07	[URL="System%20Context.md#C07",
+			C07	[URL="README.md#C07",
 				id=C07,
 				label="Datenbank\nC07",
 				shape=cylinder,
@@ -71,11 +71,11 @@ digraph FinSec {
 			];
 			{
 				graph [rank=same];
-				C02	[URL="System%20Context.md#C02",
+				C02	[URL="README.md#C02",
 					id=C02,
 					label="Web-Frontend\nC02",
 					tooltip="Web-Frontend – Beschreibung"];
-				C03	[URL="System%20Context.md#C03",
+				C03	[URL="README.md#C03",
 					id=C03,
 					label="Mobile App\n(geplant)\nC03",
 					tooltip="Mobile App (geplant) – Beschreibung"];
@@ -88,34 +88,34 @@ digraph FinSec {
 			];
 			{
 				graph [rank=same];
-				C05	[URL="System%20Context.md#C05",
+				C05	[URL="README.md#C05",
 					id=C05,
 					label="Finanzdatenverarbeitung\nC05",
 					tooltip="Finanzdatenverarbeitung – Beschreibung"];
-				C06	[URL="System%20Context.md#C06",
+				C06	[URL="README.md#C06",
 					id=C06,
 					label="Bankanbindung\nC06",
 					tooltip="Bankanbindung – Beschreibung"];
 			}
 			C04;
-			C04 -> C05	[URL="System%20Context.md#F05",
+			C04 -> C05	[URL="README.md#F05",
 				id=F05,
 				label=F05,
 				tooltip="F05: Analyseauftrag & Auswertung"];
-			C04 -> C06	[URL="System%20Context.md#F06",
+			C04 -> C06	[URL="README.md#F06",
 				id=F06,
 				label=F06,
 				tooltip="F06: Bankauftrag & Ergebnis"];
 		}
-		C02 -> C04	[URL="System%20Context.md#F03",
+		C02 -> C04	[URL="README.md#F03",
 			id=F03,
 			label=F03,
 			tooltip="F03: Anfragen & Ergebnisse"];
-		C03 -> C04	[URL="System%20Context.md#F04",
+		C03 -> C04	[URL="README.md#F04",
 			id=F04,
 			label=F04,
 			tooltip="F04: Anfragen & Ergebnisse"];
-		C04 -> C07	[URL="System%20Context.md#F07",
+		C04 -> C07	[URL="README.md#F07",
 			id=F07,
 			label=F07,
 			tooltip="F07: Lesen & Speichern"];
@@ -129,44 +129,44 @@ digraph FinSec {
 			label="",
 			shape=point,
 			width=0.03];
-		client_link -> C02	[URL="System%20Context.md#F01",
+		client_link -> C02	[URL="README.md#F01",
 			id=F01,
 			label=F01,
 			tooltip="F01: Nutzung & Rückmeldungen"];
-		client_link -> C03	[URL="System%20Context.md#F02",
+		client_link -> C03	[URL="README.md#F02",
 			id=F02,
 			label=F02,
 			tooltip="F02: Nutzung & Rückmeldungen"];
 	}
-	C01	[URL="System%20Context.md#C01",
+	C01	[URL="README.md#C01",
 		id=C01,
 		label="Kund:innen\nC01",
 		tooltip="Kund:innen – Beschreibung"];
 	C01 -> client_link	[color="#94a3b8",
 		dir=none];
-	C08 -> C09	[URL="System%20Context.md#F11",
+	C08 -> C09	[URL="README.md#F11",
 		color="#94a3b8",
 		constraint=false,
 		id=F11,
 		label=F11,
 		style=dashed,
 		tooltip="F11: Datenaustausch / Transaktionen"];
-	C09 -> C10	[URL="System%20Context.md#F11",
+	C09 -> C10	[URL="README.md#F11",
 		color="#94a3b8",
 		constraint=false,
 		id="F11-C10",
 		label=F11,
 		style=dashed,
 		tooltip="F11: Datenaustausch / Transaktionen"];
-	bank_link -> C08	[URL="System%20Context.md#F08",
+	bank_link -> C08	[URL="README.md#F08",
 		id=F08,
 		label=F08,
 		tooltip="F08: Kontoabruf & Zahlungsauftrag"];
-	bank_link -> C09	[URL="System%20Context.md#F08",
+	bank_link -> C09	[URL="README.md#F08",
 		id="F08-C09",
 		label=F08,
 		tooltip="F08: Kontoabruf & Zahlungsauftrag"];
-	bank_link -> C10	[URL="System%20Context.md#F08",
+	bank_link -> C10	[URL="README.md#F08",
 		id="F08-C10",
 		label=F08,
 		tooltip="F08: Kontoabruf & Zahlungsauftrag"];
