@@ -1,5 +1,5 @@
 digraph FinSec {
-graph [rankdir=TB, newrank=true, splines=polyline, bgcolor="white", fontname="DejaVu Sans", fontsize=18, pad=0.35, nodesep=0.65, ranksep=0.8, compound=true, label="FinSec · System Context", labelloc=t];
+graph [rankdir=TB, newrank=true, splines=polyline, bgcolor="white", fontname="DejaVu Sans", fontsize=18, pad=0.35, nodesep=0.65, ranksep=0.8, compound=true, labelloc=t];
 node [shape=box, style="rounded,filled", fillcolor="#f1f5f9", color="#64748b", fontname="DejaVu Sans", fontsize=12, margin="0.22,0.16", target="_top"];
 edge [dir=both, color="#475569", fontname="DejaVu Sans", fontsize=10, arrowsize=0.7, target="_top"];
 C01 [id="C01", label="Kund:innen\nC01", URL="README.md#C01", tooltip="Kund:innen – Beschreibung"];
@@ -12,10 +12,10 @@ C07 [id="C07", label="Datenbank\nC07", URL="README.md#C07", tooltip="Datenbank �
 C08 [id="C08", label="Bank 1\nC08", URL="README.md#C08", tooltip="Bank 1 – Beschreibung"];
 C09 [id="C09", label="Bank 2\nC09", URL="README.md#C09", tooltip="Bank 2 – Beschreibung"];
 C10 [id="C10", label="Bank n\nC10", URL="README.md#C10", tooltip="Bank n – Beschreibung"];
-subgraph cluster_responsibility { label="FinSec-Verantwortung · einschließlich sicherer Verbindungen zu externen Parteien"; style="rounded,filled"; color="#d6a900"; fillcolor="#fff8cc"; penwidth=2; margin=24;
+subgraph cluster_responsibility { label="FinSec-Verantwortung"; style="rounded,filled"; color="#d6a900"; fillcolor="#fff8cc"; penwidth=2; margin=24;
 client_link [shape=point, width=0.03, label="", color="#d6a900"];
 subgraph cluster_frontends { label="Frontends"; color="#94a3b8"; fillcolor="#ffffff"; C02; C03; {rank=same; C02; C03;} }
-subgraph cluster_backend { label="Backend · drei funktionale Bereiche"; color="#94a3b8"; fillcolor="#ffffff"; C04; C05; C06; {rank=same; C05; C06;} }
+subgraph cluster_backend { label="Backend"; color="#94a3b8"; fillcolor="#ffffff"; C04; C05; C06; {rank=same; C05; C06;} }
 C07;
 bank_link [shape=point, width=0.03, label="", color="#d6a900"];
 {rank=same; C04; C07;} C07 -> bank_link [style=invis];

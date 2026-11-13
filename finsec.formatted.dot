@@ -3,7 +3,6 @@ digraph FinSec {
 		compound=true,
 		fontname="DejaVu Sans",
 		fontsize=18,
-		label="FinSec · System Context",
 		labelloc=t,
 		newrank=true,
 		nodesep=0.65,
