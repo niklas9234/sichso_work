@@ -1,7 +1,5 @@
 # 2.2 Privacy Impact Analysis
 
-Grundlage ist der vorhandene FinSec-Systemkontext. Die folgenden drei Kategorien werden von FinSec selbst verarbeitet oder gespeichert. Die Speicherung ist als einfacher Architekturentwurf zu verstehen.
-
 ## 1. FinSec-Benutzerdaten
 
 - **Daten:** Benutzerkennung, E-Mail-Adresse und Passwort-Hash. Das eingegebene Passwort wird nur zur Anmeldung verarbeitet und nicht im Klartext gespeichert.
@@ -25,7 +23,3 @@ Grundlage ist der vorhandene FinSec-Systemkontext. Die folgenden drei Kategorien
 - **Speicherung:** In der FinSec-Datenbank; während der Analyse zusätzlich vorübergehend in der Finanzdatenverarbeitung.
 - **Zweck:** Kontostände und Umsätze anzeigen, Überweisungen ausführen, Ausgaben auswerten und Sparhinweise erstellen.
 - **Funktionale DSGVO-Anforderungen:** Nur Daten für diese Zwecke abrufen und verarbeiten (Art. 5 Abs. 1 lit. b, c); dem Nutzer Auskunft und einen Export ermöglichen, bei erfüllten Voraussetzungen auch in einem übertragbaren Format (Art. 15, 20); falsche Zuordnungen bzw. Auswertungskategorien korrigierbar machen (Art. 16); nicht mehr benötigte Daten nach festgelegten Fristen löschen, soweit keine Aufbewahrungspflicht besteht (Art. 5 Abs. 1 lit. e, Art. 17).
-
-Für alle drei Kategorien muss vor der Verarbeitung eine passende Rechtsgrundlage festgelegt werden (Art. 6). Zugriffe müssen auf berechtigte Nutzer und benötigte Komponenten beschränkt sein (Art. 25, 32).
-
-**Quelle:** [DSGVO, Verordnung (EU) 2016/679](https://eur-lex.europa.eu/eli/reg/2016/679/oj). Die im Aufgabenblatt genannten Vorlesungsfolien lagen nicht vor; die Anforderungen sind daher direkt aus den genannten DSGVO-Artikeln abgeleitet.
