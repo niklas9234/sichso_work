@@ -1,9 +1,5 @@
 ## Task 2 – Regulations, Standards and Partners
 
-Stand: 11.11.2026. FinSec verarbeitet persönliche Finanzdaten, verbindet Bankkonten und soll Überweisungen ermöglichen. Dafür sind die folgenden Regeln, Standards und Partner wichtig. Die Anforderungen zeigen, was wir bei der Entwicklung berücksichtigen müssen; umgesetzt sind sie damit noch nicht.
-
-Ob FinSec selbst als Kontoinformationsdienst (AISP) oder Zahlungsauslösedienst (PISP) auftritt oder dafür einen zugelassenen Anbieter nutzt, ist noch offen. Davon hängen einige der Pflichten ab.
-
 ### Übersicht
 
 | ID | Regel / Standard / Partner | Warum relevant? / Zuständig | Anforderung 1 | Anforderung 2 | Komponenten |
@@ -16,14 +12,6 @@ Ob FinSec selbst als Kontoinformationsdienst (AISP) oder Zahlungsauslösedienst 
 | S01 | **OWASP ASVS 5.0.0** [Q6] | Praktischer Sicherheitsstandard für Webanwendungen und APIs. Kein Gesetz, aber eine sinnvolle Prüfliste für unser Entwicklungsteam. | **S01.1:** Datenbankabfragen gegen Injection absichern, z. B. mit parametrisierten Abfragen (V1.2.4). | **S01.2:** Berechtigungen im Backend prüfen, damit Nutzer nicht auf fremde Kontodaten zugreifen können (V8.3.1). | C02, C04–C07 |
 | P01 | **Angebundene Banken** [Q2, Q3] | Stellen Kontodaten und Zahlungsfunktionen bereit. Konkrete Banken stehen noch nicht fest; ihre API-Vorgaben müssen wir später ergänzen. | **P01.1:** API-Version, Zertifikate und Antwortformate der jeweiligen Bank prüfen und die Anbindung testen. | **P01.2:** Abgelaufene Berechtigungen und abgelehnte Zahlungen sauber behandeln, ohne unberechtigten Zugriff oder unbeabsichtigte Doppelverarbeitung. | C04, C06, C08–C10 |
 
-Die Bankanforderungen sind bisher aus PSD2/RTS abgeleitet, nicht aus Vorgaben einer bestimmten Bank. Ein zusätzlicher Vertrag mit jeder Bank wird damit nicht als Voraussetzung für den regulierten Kontozugriff angenommen. Für die native App braucht es neben ASVS noch passende mobile Sicherheitsprüfungen.
-
-### CRA, NIS2 und Geltungsbereich
-
-Mit einer „EU Internet Security Guideline“ könnten **CRA** oder **NIS2** gemeint sein. Der CRA betrifft Produkte mit digitalen Elementen; reine eigenständige SaaS-Angebote fallen nicht automatisch darunter. Seine Hauptpflichten gelten grundsätzlich ab **11.12.2027**, die Meldepflichten aus Art. 14 bereits ab **11.09.2026**.
-
-**NIS2** [Q7] betrifft bestimmte Einrichtungen und Sektoren. Ob FinSec darunterfällt, hängt unter anderem von Tätigkeit, Größe und nationaler Umsetzung ab. Bei Überschneidungen mit DORA muss die Abgrenzung geprüft werden (NIS2 Art. 4, DORA Art. 1 Abs. 2). DORA gilt seit **17.01.2025**; mögliche Ausnahmen und vereinfachte Vorgaben hängen vom konkreten Anbieter ab.
-
 ### Quellen
 
 - **Q1:** [DSGVO – Verordnung (EU) 2016/679](https://eur-lex.europa.eu/eli/reg/2016/679/oj), Art. 5, 6, 25, 32.
@@ -33,7 +21,3 @@ Mit einer „EU Internet Security Guideline“ könnten **CRA** oder **NIS2** ge
 - **Q5:** [DORA – Verordnung (EU) 2022/2554](https://eur-lex.europa.eu/eli/reg/2022/2554/oj), Art. 2, 5–19, 24–30.
 - **Q6:** [OWASP ASVS 5.0.0](https://github.com/OWASP/ASVS/tree/v5.0.0), [Anforderungskatalog](https://github.com/OWASP/ASVS/blob/v5.0.0/5.0/docs_en/OWASP_Application_Security_Verification_Standard_5.0.0_en.csv), V1.2.4 und V8.3.1.
 - **Q7:** [NIS2 – Richtlinie (EU) 2022/2555](https://eur-lex.europa.eu/eli/dir/2022/2555/oj), Art. 4, 21, 23.
-
-### Noch offen
-
-OWASP wurde am 11.11.2026 online geprüft. EUR-Lex war durch die Netzwerkfreigabe blockiert; die Rechtsquellen und ihr aktueller Änderungsstand müssen daher vor der Abgabe noch abgeglichen werden. Die Vorlesungsfolien lagen nicht vor. Außerdem müssen wir Anbieterrolle, Sitz und konkrete Bankpartner festlegen. Bis dahin ist die Tabelle eine Vorbewertung. Das CRA-Formular aus Task 3 ist damit noch nicht ausgefüllt.
