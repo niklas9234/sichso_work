@@ -1,7 +1,5 @@
 # 2.3 Sequenzdiagramm – Kontostände lesen
 
-**Voraussetzung:** Der Nutzer ist bei FinSec angemeldet. Ein gültiger Customer Refresh Token liegt vor, aber kein Customer Token.
-
 ```mermaid
 sequenceDiagram
     actor U as Nutzer
@@ -25,6 +23,3 @@ sequenceDiagram
     F-->>U: Kontostände anzeigen
 ```
 
-**Zugangsdaten und Daten:** Der Refresh-Aufruf benötigt den vorhandenen Customer Refresh Token sowie Client-ID und Client-Secret. Danach werden Konten und Kontostände mit Customer Token und Consent-ID abgerufen. Das Frontend erhält die aufbereiteten Kontodaten, keine Bank-Tokens. Eine erneute Bankanmeldung ist bei gültigem Refresh Token nicht nötig.
-
-**Quelle:** EuroTrust Bank — API Guide, Abschnitte 3, 5 und 6. Die Consent-ID wird aus der bestehenden Bankverbindung verwendet.
