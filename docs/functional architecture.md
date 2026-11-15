@@ -1,7 +1,5 @@
 # 2.4 Funktionale Architektur
 
-Die Module orientieren sich am vorhandenen [Systemkontext](../README.md). Das Frontend umfasst die Weboberfläche und die geplante mobile App. Welche Funktionen die Weboberfläche unterstützt, ist noch offen.
-
 ```mermaid
 flowchart TB
     subgraph FE["Frontend"]
@@ -38,7 +36,5 @@ flowchart TB
     BBank <--> DB
     BBank <--> Bank
 ```
-
-Die Kontoverwaltung ruft Kontostände sowie vergangene und geplante Transaktionen ab. Die Bankanbindung kann erlaubte Kontoabrufe auch automatisch ausführen. Bei einer Überweisung zeigt das Frontend die nötige Weiterleitung zur Bankfreigabe an; die Bank führt die Zahlung aus.
 
 Die Authentifizierung liegt in beiden Teilen: Das Frontend nimmt die Anmeldung entgegen, das Backend prüft Zugangsdaten und Sitzungen. In der Datenbank werden die FinSec-Nutzerkennung und der Passworthash gespeichert. Die Bankanmeldung erfolgt bei der Bank; FinSec verwaltet dafür die erhaltenen Tokens.
