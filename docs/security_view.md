@@ -1,8 +1,9 @@
-# 3.1.1 Security View – Credentials
+# 3.1.1 Security View – Credentials EuroTrust
 
 ```mermaid
 flowchart TB
     subgraph FE["Frontend"]
+        FscaRedirect["scaRedirect"]
         FAuth["Authentifizierung: Anmeldung und Abmeldung"]
         FAccount["Bankkonto verknüpfen; Kontostand und Transaktionen anzeigen"]
         FPayment["Überweisung erfassen und Status anzeigen"]
@@ -14,20 +15,20 @@ flowchart TB
         BAccount["Kontoverwaltung: Konten zuordnen und Finanzdaten abrufen"]
         BPayment["Zahlungsverwaltung: Aufträge prüfen und weiterleiten"]
         BAnalysis["Finanzdatenverarbeitung: klassifizieren, aggregieren, analysieren; Sparhinweise erstellen"]
-        BBank["Bankanbindung: \n Client-ID und Client-Secret \n Company Token"]
-        DB[("Datenbank: Nutzer und Passworthashes, Bankverbindungen und Finanzdaten")]
+        BBank["Bankanbindung: \n Client-ID und Client-Secret \n Company Token \n Authorization Code \n Customer Token"]
+        DB[("Datenbank: Customer refresh token")]
     end
 
-    Bank["EuroTrust / weitere Banken (extern)"]
+    Bank["EuroTrust \n Customer bank account credentials"]
 
     FAuth <--> BAuth
     FAccount <--> BAccount
     FPayment <--> BPayment
     FAnalysis <--> BAnalysis
-    BAuth <-->|"FinSec-Login-Daten"| DB
-    BAuth -.->|"Sitzung und Berechtigung prüfen"| BAccount
-    BAuth -.->|"Sitzung und Berechtigung prüfen"| BPayment
-    BAuth -.->|"Sitzung und Berechtigung prüfen"| BAnalysis
+    BAuth <--> DB
+    BAuth -.-> BAccount
+    BAuth -.-> BPayment
+    BAuth -.-> BAnalysis
     BAccount <--> BBank
     BPayment <--> BBank
     BAccount <--> DB
@@ -35,6 +36,6 @@ flowchart TB
     BAnalysis <--> DB
     BBank <--> DB
     BBank <--> Bank
-    FAuth <--> Bank
+    FscaRedirect --> Bank
 ```
 
