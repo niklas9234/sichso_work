@@ -10,8 +10,6 @@
 
 ## Schritte 2 und 3: Misuse Cases und Schaden
 
-Die Bewertung beschreibt den möglichen Schaden des jeweiligen Falls, nicht seine Eintrittswahrscheinlichkeit. Verwendet werden die Schadensklassen aus dem Aufgabenblatt.
-
 | STRIDE-Bedrohung / verletztes Schutzziel | Asset | Misuse Case | Schadensklasse und Begründung |
 | --- | --- | --- | --- |
 | **S – Spoofing / Authentizität** | A1 | Ein Angreifer meldet sich mit gestohlenen Zugangsdaten als ein anderer Nutzer bei FinSec an. | **High:** Übernahme eines Benutzerkontos mit Zugriff auf dessen Finanzdaten und Funktionen. |
@@ -30,5 +28,3 @@ Die Bewertung beschreibt den möglichen Schaden des jeweiligen Falls, nicht sein
 | R | FinSec muss Zahlungsaufträge mit Nutzerzuordnung, Zeitpunkt, Auftragsdaten und Freigabestatus nachvollziehbar und gegen nachträgliche Veränderung geschützt aufzeichnen. |
 | I | Finanzdaten dürfen nur vom jeweils berechtigten Nutzer und den für die Verarbeitung benötigten FinSec-Komponenten gelesen werden. |
 | E | FinSec muss Berechtigungen im Backend prüfen und verhindern, dass Nutzer ihre Rechte selbst erweitern oder fremde Konten verwalten. |
-
-Für D ist nach der Aufgabenstellung wegen der Bewertung **Low** kein zusätzliches Sicherheitsziel gefordert.
