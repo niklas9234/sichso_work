@@ -1,4 +1,18 @@
-# Design Principles Discussion – FinSec
+# 3. Design Principles Discussion – FinSec
+
+## 3.1.1 Zuordnung und Speicherung der Zugangsmittel
+
+| Zugangsmittel | Wer braucht es und wofür? | Speicherort und Lebensdauer |
+| --- | --- | --- |
+| Client-ID und Client-Secret | Die Bankanbindung weist damit FinSec gegenüber dem EuroTrust-Token-Endpunkt aus. Das Paar wird beim Company-Token-Abruf, beim Code-Austausch und beim Refresh verwendet. | Langlebig in serverseitiger Konfiguration mit Zugriff für die Bankanbindung. Das Client-Secret liegt in der geschützten Konfiguration der Bankanbindung und wird nur an den Token-Endpunkt gesendet. |
+| Company Token | Die Bankanbindung erstellt damit eine Anfrage zur Kontoverknüpfung bei EuroTrust. | Kurzzeitig im Arbeitsspeicher der Bankanbindung, laut Spezifikation etwa 10 Minuten gültig. |
+| Bankzugangsdaten der Kund:innen | Kund:innen geben Bank-Benutzername, Passwort und TOTP auf der EuroTrust-Seite ein. EuroTrust prüft sie. | Die Zugangsdaten bleiben bei Kund:innen und EuroTrust. FinSec speichert sie nicht. |
+| Authorization Code | EuroTrust leitet den Browser mit einem einmaligen Code an die registrierte FinSec-Rückkehr-URL weiter. Die Bankanbindung prüft am Rückkehr-Endpunkt die Zuordnung zur Sitzung und zum Vorgang und tauscht den Code anschließend am Token-Endpunkt ein. | Nur während der Verarbeitung im Backend, laut Spezifikation etwa 60 Sekunden gültig. Callback-Parameter werden von der Protokollierung ausgenommen. |
+| Customer Refresh Token | Die Bankanbindung fordert damit und mit Client-ID und Client-Secret einen neuen Customer Token an. | Langlebig und verschlüsselt im geschützten Refresh-Token-Bereich der Datenbank, einer konkreten Bankverbindung zugeordnet. Bei erfolgreicher Erneuerung ersetzt der neue Refresh Token den bisherigen. Parallele Erneuerungen derselben Verbindung werden serialisiert. |
+| Customer Token | Die Bankanbindung ruft damit Kontodaten zusammen mit der Consent-ID ab und führt die vorgesehenen Zahlungsaufrufe aus. | Kurzzeitig im Arbeitsspeicher der Bankanbindung, laut Spezifikation etwa 30 Minuten gültig. Kontoverwaltung und Zahlungsverwaltung erhalten nur die fachlichen API-Ergebnisse. |
+
+Die Consent-ID gehört zu den Verbindungsdaten. `scaRedirect` führt den Browser zur Bank, und der zufällige `state` ordnet die Rückkehr dem ursprünglichen FinSec-Vorgang zu.
+
 
 ## Ausgangspunkt und Sicherheitsarchitektur
 
@@ -16,20 +30,7 @@ Durchgezogene Pfeile führen von der aufrufenden Komponente zur erlaubten Schnit
 
 ![Sicherheitsarchitektur von FinSec mit getrennten Bereichen in einer Datenbank](docs/architecture/security.svg)
 
-## 1.1 Zuordnung und Speicherung der Zugangsmittel
-
-| Zugangsmittel | Wer braucht es und wofür? | Speicherort und Lebensdauer |
-| --- | --- | --- |
-| Client-ID und Client-Secret | Die Bankanbindung weist damit FinSec gegenüber dem EuroTrust-Token-Endpunkt aus. Das Paar wird beim Company-Token-Abruf, beim Code-Austausch und beim Refresh verwendet. | Langlebig in serverseitiger Konfiguration mit Zugriff für die Bankanbindung. Das Client-Secret liegt in der geschützten Konfiguration der Bankanbindung und wird nur an den Token-Endpunkt gesendet. |
-| Company Token | Die Bankanbindung erstellt damit eine Anfrage zur Kontoverknüpfung bei EuroTrust. | Kurzzeitig im Arbeitsspeicher der Bankanbindung, laut Spezifikation etwa 10 Minuten gültig. |
-| Bankzugangsdaten der Kund:innen | Kund:innen geben Bank-Benutzername, Passwort und TOTP auf der EuroTrust-Seite ein. EuroTrust prüft sie. | Die Zugangsdaten bleiben bei Kund:innen und EuroTrust. FinSec speichert sie nicht. |
-| Authorization Code | EuroTrust leitet den Browser mit einem einmaligen Code an die registrierte FinSec-Rückkehr-URL weiter. Die Bankanbindung prüft am Rückkehr-Endpunkt die Zuordnung zur Sitzung und zum Vorgang und tauscht den Code anschließend am Token-Endpunkt ein. | Nur während der Verarbeitung im Backend, laut Spezifikation etwa 60 Sekunden gültig. Callback-Parameter werden von der Protokollierung ausgenommen. |
-| Customer Refresh Token | Die Bankanbindung fordert damit und mit Client-ID und Client-Secret einen neuen Customer Token an. | Langlebig und verschlüsselt im geschützten Refresh-Token-Bereich der Datenbank, einer konkreten Bankverbindung zugeordnet. Bei erfolgreicher Erneuerung ersetzt der neue Refresh Token den bisherigen. Parallele Erneuerungen derselben Verbindung werden serialisiert. |
-| Customer Token | Die Bankanbindung ruft damit Kontodaten zusammen mit der Consent-ID ab und führt die vorgesehenen Zahlungsaufrufe aus. | Kurzzeitig im Arbeitsspeicher der Bankanbindung, laut Spezifikation etwa 30 Minuten gültig. Kontoverwaltung und Zahlungsverwaltung erhalten nur die fachlichen API-Ergebnisse. |
-
-Die Consent-ID gehört zu den Verbindungsdaten. `scaRedirect` führt den Browser zur Bank, und der zufällige `state` ordnet die Rückkehr dem ursprünglichen FinSec-Vorgang zu.
-
-## 1.2 Segmentation and Least Privilege
+## 3.1.2 Segmentation and Least Privilege
 
 Die gemeinsame Datenbank erhält getrennte Zugriffsbereiche mit eigenen Rollen für die zugreifenden Backend-Komponenten. Die Zahlungsverwaltung darf beispielsweise die Kontozuordnung lesen und Zahlungsaufträge verwalten. Die Finanzdatenverarbeitung erhält Lesezugriff auf freigegebene Finanzdaten und schreibt ihre Analyseergebnisse. Anfragen werden auf die Nutzer-ID und die berechtigte Bankverbindung eingeschränkt.
 
