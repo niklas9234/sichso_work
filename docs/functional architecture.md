@@ -6,4 +6,4 @@ Das Frontend nutzt Authentifizierung, Kontoverwaltung, Zahlungsverwaltung und Fi
 
 Die gestrichelte Verbindung zeigt die SCA-Weiterleitung im Browser. FinSec liefert die Redirect-URL, der Browser öffnet EuroTrust und Kund:innen melden sich dort bei der Bank an. EuroTrust leitet den Browser anschließend an die registrierte FinSec-Rückkehr-URL zurück.
 
-Die [Sicherheitsansicht](security_view.md) verfeinert diese Architektur. Die [Diagrammübersicht](architecture/README.md) ordnet die Ansichten und Anwendungsfälle ein.
+Die [Sicherheitsansicht](../design%20principles%20discussion.md#nachher--sicherheitsarchitektur) verfeinert diese Architektur. Die [Diagrammübersicht](architecture/README.md) ordnet die Ansichten und Anwendungsfälle ein.

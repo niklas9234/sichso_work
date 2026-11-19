@@ -4,7 +4,7 @@
 | --- | --- | --- |
 | Systemkontext | [Übersicht im Projekt-README](../../README.md) | Übung 1. Zeigt die FinSec-Systemgrenze, externe Beteiligte und Datenflüsse. |
 | Funktionale Architektur | [Grunddiagramm und Erläuterung](../functional%20architecture.md) | Übung 2. Zeigt die Komponenten innerhalb von FinSec und ihre Schnittstellen. |
-| Sicherheitsarchitektur | [Security View](../security_view.md) | Übung 3. Verfeinert das Grunddiagramm mit Datenbankrechten und EuroTrust-Zugangsmitteln. |
+| Sicherheitsarchitektur | [Sicherheitsansicht in der Discussion](../../design%20principles%20discussion.md#nachher--sicherheitsarchitektur) | Übung 3. Verfeinert das Grunddiagramm mit Datenbankrechten und EuroTrust-Zugangsmitteln. |
 | Vorher/Nachher | [Design Principles Discussion](../../design%20principles%20discussion.md) | Zeigt beide Architekturstände nebeneinander im selben Dokument und begründet die Änderungen. |
 
 Die Sequenzdiagramme zeigen den zeitlichen Ablauf konkreter Anwendungsfälle derselben Architektur. [Konto verknüpfen](../user%20account%20link.md) · [Kontostand abrufen](../user%20balance.md) · [Überweisen](../user%20transfer.md)
