@@ -12,13 +12,11 @@ Der Browser öffnet die SCA-Seite direkt bei EuroTrust. Für Konto- und Zahlungs
 
 ### Nachher – Sicherheitsarchitektur
 
-Die durchgezogenen Pfeile zeigen erlaubte Operationen. Der gestrichelte Pfeil zeigt die SCA-Weiterleitung vom Browser zu EuroTrust. Sie führen von der aufrufenden Komponente zur Schnittstelle oder zum Datenbereich, auf den sie zugreifen darf. Die Bereiche im Datenbankkasten gehören zur selben Datenbank.
+Durchgezogene Pfeile führen von der aufrufenden Komponente zur erlaubten Schnittstelle oder zum erlaubten Bereich der gemeinsamen Datenbank. Der gestrichelte Pfeil zeigt die SCA-Weiterleitung vom Browser zu EuroTrust.
 
 ![Sicherheitsarchitektur von FinSec mit getrennten Bereichen in einer Datenbank](docs/architecture/security.svg)
 
-Die Zugangsmittel stehen bei der zuständigen Komponente oder im zugehörigen Datenbankbereich. Die Tabelle erklärt ihre Speicherdauer. Die Bankanbindung verarbeitet den Authorization Code über die registrierte FinSec-Rückkehr-URL. Den SCA-Ablauf zeigt das [Sequenzdiagramm zur Kontoverknüpfung](docs/user%20account%20link.md).
-
-## 1.1 Zugangsmittel nach EuroTrust-Spezifikation
+## 1.1 Zuordnung und Speicherung der Zugangsmittel
 
 | Zugangsmittel | Wer braucht es und wofür? | Speicherort und Lebensdauer |
 | --- | --- | --- |
@@ -33,17 +31,9 @@ Die Consent-ID gehört zu den Verbindungsdaten. `scaRedirect` führt den Browser
 
 ## 1.2 Segmentation and Least Privilege
 
-Die Datenbereiche folgen den Zugriffsrechten der Komponenten. Jede Backend-Komponente verwendet eine eigene Datenbankrolle mit den unten aufgeführten Rechten für die jeweiligen Bereiche. Anfragen von Kund:innen werden zusätzlich auf die eigene Nutzer-ID und die zugeordnete Bankverbindung eingeschränkt.
+Die gemeinsame Datenbank erhält getrennte Zugriffsbereiche mit eigenen Rollen für die zugreifenden Backend-Komponenten. Die Zahlungsverwaltung darf beispielsweise die Kontozuordnung lesen und Zahlungsaufträge verwalten. Die Finanzdatenverarbeitung erhält Lesezugriff auf freigegebene Finanzdaten und schreibt ihre Analyseergebnisse. Anfragen werden auf die Nutzer-ID und die berechtigte Bankverbindung eingeschränkt.
 
-| Datenbereich | Inhalt und Zugriff |
-| --- | --- |
-| FinSec-Nutzerdaten | Nutzer-ID, E-Mail und ggf. Profil. Die Authentifizierung verwaltet die Login-Zuordnung. Fachkomponenten erhalten die geprüfte Nutzer-ID. |
-| FinSec-Authentifizierung | Passworthashes und Sitzungsdaten. Die Authentifizierung prüft das beim Login eingegebene Passwort und stellt die Sitzung aus. Das Frontend verwendet den Sitzungsnachweis. Die Fachkomponenten prüfen im Backend, ob die Sitzung und die fachliche Berechtigung für den jeweiligen Vorgang vorliegen. |
-| Bankverbindungen und Einwilligungen | Nutzer-ID, Bank, Konto- bzw. Ressourcen-ID, Consent-ID und Einwilligungsstatus. Die Kontoverwaltung pflegt die Zuordnung. Die Zahlungsverwaltung liest die benötigte Zuordnung für das Zahlungskonto. Die Bankanbindung erhält die geprüften Verbindungsdaten für den jeweiligen Aufruf. |
-| Finanzdaten | Kontostände und Transaktionen. Die Kontoverwaltung liest und schreibt sie. Die Finanzdatenverarbeitung liest nur die für die Auswertung freigegebenen Daten. |
-| Zahlungsdaten | Zahlungskonto, Empfänger-IBAN, Betrag, Währung, Zahlungs-ID und Status. Die Zahlungsverwaltung liest und schreibt sie. Die Bankanbindung erhält die Daten, die der konkrete Bankaufruf benötigt. |
-| Analyseergebnisse | Klassifikationen, Auswertungen und Sparhinweise. Die Finanzdatenverarbeitung erstellt sie und liefert der Oberfläche nur die Ergebnisse des angemeldeten Nutzers. |
-| Bank-API-Zugangsmittel | Die Bankanbindung allein erhält Zugriff auf die TPP-Konfiguration und den Refresh-Token-Bereich der Datenbank. Fachkomponenten rufen bei ihr getrennte Operationen für Kontodaten und Zahlungen auf. EuroTrust erlaubt mit demselben Customer Token beide Arten von Aufrufen. Die Trennung dieser Rechte wird daher innerhalb von FinSec durchgesetzt. |
+Die Bankanbindung prüft anhand der Dienstidentität, welche Operation der Aufrufer ausführen darf. Die Kontoverwaltung darf ein Konto verknüpfen oder Kontodaten abrufen. Die Zahlungsverwaltung darf Zahlungen auslösen oder ihren Status abfragen. EuroTrust erlaubt mit demselben Customer Token beide Arten von Aufrufen. Die Bankanbindung behält den Token und gibt nur das fachliche Ergebnis zurück. FinSec setzt die Trennung damit an seiner eigenen Schnittstelle durch.
 
 **Vorteile.** Ein kompromittierter Analysedienst hat über seine Rolle keinen Zugriff auf Refresh Tokens, Passworthashes oder Zahlungsaufträge. Fehler in der Kontoverwaltung eröffnen über deren Schnittstelle keine Zahlungsoperationen.
 
