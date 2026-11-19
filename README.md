@@ -2,6 +2,8 @@
 
 ![FinSec-Systemkontext](finsec.svg)
 
+[Architektur und Diagramme](docs/architecture/README.md)
+
 Der gelbe Rahmen umfasst FinSec und die von FinSec abzusichernden Teile der Anschlusswege. Kundengeräte und Banken bleiben extern. Die drei Backend-Bereiche sind funktionale Bereiche, keine Deployment-Stufen.
 
 ## Komponenten (1.1)

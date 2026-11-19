@@ -1,0 +1,58 @@
+digraph Security {
+    graph [rankdir=TB, bgcolor="white", pad=0.2, nodesep=0.35, ranksep=0.7,
+           fontname="DejaVu Sans", label="FinSec · Sicherheitsarchitektur", labelloc=t]
+    node [shape=box, style="rounded,filled", fillcolor="#f8fafc", color="#64748b",
+          fontname="DejaVu Sans", fontsize=11, margin="0.16,0.10"]
+    edge [color="#475569", fontcolor="#334155", fontname="DejaVu Sans", fontsize=10, arrowsize=0.7]
+
+    frontend [label="FinSec-Frontend (Browser)"]
+    bank [label="EuroTrust\nBank-Login und TOTP", fillcolor="#fff7ed"]
+
+    subgraph cluster_backend {
+        label="FinSec-Backend"
+        labelloc=b
+        labeljust=l
+        color="#94a3b8"
+        style=rounded
+        margin=18
+
+        auth [label="Authentifizierung"]
+        accounts [label="Kontoverwaltung"]
+        payments [label="Zahlungsverwaltung"]
+        analysis [label="Finanzdatenverarbeitung"]
+        adapter [label="Bankanbindung\nClient-ID und Client-Secret\nCompany Token und Customer Token\nAuthorization Code"]
+
+        database [shape=plain, label=<
+            <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="7" COLOR="#64748b" BGCOLOR="#eff6ff">
+                <TR><TD><B>Datenbank</B></TD></TR>
+                <HR/><TR><TD PORT="login">Nutzerdaten und Authentifizierung</TD></TR>
+                <HR/><TR><TD PORT="consents">Bankverbindungen und Einwilligungen</TD></TR>
+                <HR/><TR><TD PORT="finance">Finanzdaten</TD></TR>
+                <HR/><TR><TD PORT="orders">Zahlungsdaten</TD></TR>
+                <HR/><TR><TD PORT="results">Analyseergebnisse</TD></TR>
+                <HR/><TR><TD PORT="refresh">Customer Refresh Token</TD></TR>
+            </TABLE>
+        >]
+
+        {rank=same; auth; accounts; payments; analysis}
+        {rank=same; adapter; database}
+
+        accounts -> adapter [label="Verknüpfen / Kontodaten abrufen"]
+        payments -> adapter [label="Zahlung / Status"]
+        adapter -> database:refresh:w [label="Lesen / ersetzen"]
+        auth -> database:login
+        accounts -> database:consents
+        accounts -> database:finance
+        payments -> database:consents [label="Lesen"]
+        payments -> database:orders
+        analysis -> database:finance [label="Lesen"]
+        analysis -> database:results
+    }
+
+    frontend -> auth [label="Anmeldung"]
+    frontend -> accounts
+    frontend -> payments
+    frontend -> analysis
+    adapter -> bank [label="Bank-API nach Prüfung"]
+    frontend -> bank [label="SCA-Weiterleitung im Browser", style=dashed]
+}

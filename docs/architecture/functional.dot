@@ -1,0 +1,44 @@
+digraph Functional {
+    graph [rankdir=TB, bgcolor="white", pad=0.2, nodesep=0.35, ranksep=0.7,
+           fontname="DejaVu Sans", label="FinSec · Funktionale Architektur", labelloc=t]
+    node [shape=box, style="rounded,filled", fillcolor="#f8fafc", color="#64748b",
+          fontname="DejaVu Sans", fontsize=11, margin="0.16,0.10"]
+    edge [color="#475569", fontcolor="#334155", fontname="DejaVu Sans", fontsize=10, arrowsize=0.7]
+
+    frontend [label="FinSec-Frontend (Browser)"]
+    bank [label="EuroTrust", fillcolor="#fff7ed"]
+
+    subgraph cluster_backend {
+        label="FinSec-Backend"
+        labelloc=b
+        labeljust=l
+        color="#94a3b8"
+        style=rounded
+        margin=18
+
+        auth [label="Authentifizierung"]
+        accounts [label="Kontoverwaltung"]
+        payments [label="Zahlungsverwaltung"]
+        analysis [label="Finanzdatenverarbeitung"]
+        adapter [label="Bankanbindung"]
+        database [label="Datenbank", shape=cylinder, style=filled, fillcolor="#eff6ff"]
+
+        {rank=same; auth; accounts; payments; analysis}
+        {rank=same; adapter; database}
+
+        accounts -> adapter
+        payments -> adapter
+        adapter -> database
+        auth -> database
+        accounts -> database
+        payments -> database
+        analysis -> database
+    }
+
+    frontend -> auth [label="Anmeldung"]
+    frontend -> accounts
+    frontend -> payments
+    frontend -> analysis
+    adapter -> bank [label="Bank-API"]
+    frontend -> bank [label="SCA-Weiterleitung im Browser", style=dashed]
+}

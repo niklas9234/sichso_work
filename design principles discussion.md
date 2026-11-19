@@ -6,86 +6,15 @@ In der [funktionalen Architektur aus Übung 2, Aufgabe 4](docs/functional%20arch
 
 ### Vorher – funktionale Architektur
 
-```mermaid
-flowchart TB
-    subgraph FE["Frontend"]
-        FAuth["Authentifizierung: Anmeldung und Abmeldung"]
-        FAccount["Bankkonto verknüpfen; Kontostand und Transaktionen anzeigen"]
-        FPayment["Überweisung erfassen und Status anzeigen"]
-        FAnalysis["Auswertungen und Sparhinweise anzeigen"]
-    end
+![Funktionale Architektur von FinSec](docs/architecture/functional.svg)
 
-    subgraph BE["Backend"]
-        BAuth["Authentifizierung: Zugangsdaten und Sitzung prüfen"]
-        BAccount["Kontoverwaltung: Konten zuordnen und Finanzdaten abrufen"]
-        BPayment["Zahlungsverwaltung: Aufträge prüfen und weiterleiten"]
-        BAnalysis["Finanzdatenverarbeitung: klassifizieren, aggregieren, analysieren; Sparhinweise erstellen"]
-        BBank["Bankanbindung: Autorisierung, Tokens und Bank-API"]
-        DB[("Datenbank: Nutzer und Passworthashes, Bankverbindungen und Finanzdaten")]
-    end
-
-    Bank["EuroTrust / weitere Banken (extern)"]
-
-    FAuth <--> BAuth
-    FAccount <--> BAccount
-    FPayment <--> BPayment
-    FAnalysis <--> BAnalysis
-    BAuth <-->|"FinSec-Login-Daten"| DB
-    BAuth -.->|"Sitzung und Berechtigung prüfen"| BAccount
-    BAuth -.->|"Sitzung und Berechtigung prüfen"| BPayment
-    BAuth -.->|"Sitzung und Berechtigung prüfen"| BAnalysis
-    BAccount <--> BBank
-    BPayment <--> BBank
-    BAccount <--> DB
-    BPayment <--> DB
-    BAnalysis <--> DB
-    BBank <--> DB
-    BBank <--> Bank
-```
+Der Browser öffnet die SCA-Seite direkt bei EuroTrust. Für Konto- und Zahlungsoperationen ruft das Backend die Bank-API über die Bankanbindung auf.
 
 ### Nachher – Sicherheitsarchitektur
 
-Die Pfeile zeigen erlaubte Operationen. Sie führen von der aufrufenden Komponente zur Schnittstelle oder zum Datenbereich, auf den sie zugreifen darf. Die Bereiche im Datenbankkasten gehören zur selben Datenbank.
+Die durchgezogenen Pfeile zeigen erlaubte Operationen. Der gestrichelte Pfeil zeigt die SCA-Weiterleitung vom Browser zu EuroTrust. Sie führen von der aufrufenden Komponente zur Schnittstelle oder zum Datenbereich, auf den sie zugreifen darf. Die Bereiche im Datenbankkasten gehören zur selben Datenbank.
 
-```mermaid
-flowchart LR
-    Frontend["FinSec-Frontend"]
-    Bank["EuroTrust<br/>Bankzugangsdaten und TOTP"]
-
-    subgraph Backend["FinSec-Backend"]
-        Auth["FinSec-Authentifizierung"]
-        Accounts["Kontoverwaltung"]
-        Payments["Zahlungsverwaltung"]
-        Analysis["Finanzdatenverarbeitung"]
-        Adapter["Bankanbindung<br/>Client-ID und Client-Secret<br/>Company Token und Customer Token<br/>Authorization Code"]
-
-        subgraph DB["Datenbank"]
-            Login["FinSec-Nutzerdaten und Auth<br/>Passworthashes und Sitzungen"]
-            Consents["Bankverbindungen und Einwilligungen"]
-            Finance["Finanzdaten"]
-            Orders["Zahlungsdaten"]
-            Results["Analyseergebnisse"]
-            Refresh["Customer Refresh Token"]
-        end
-    end
-
-    Frontend -->|"Anmelden"| Auth
-    Frontend -->|"Konten verwalten"| Accounts
-    Frontend -->|"Zahlungen verwalten"| Payments
-    Frontend -->|"Auswertungen abrufen"| Analysis
-
-    Auth --> Login
-    Accounts --> Consents & Finance
-    Payments -->|"Kontozuordnung lesen"| Consents
-    Payments --> Orders
-    Analysis -->|"Lesen"| Finance
-    Analysis --> Results
-    Adapter -->|"Lesen / ersetzen"| Refresh
-
-    Accounts -->|"Konto verknüpfen / Kontodaten abrufen"| Adapter
-    Payments -->|"Zahlung auslösen / Status abfragen"| Adapter
-    Adapter -->|"Bank-API nach erfolgreicher Prüfung"| Bank
-```
+![Sicherheitsarchitektur von FinSec mit getrennten Bereichen in einer Datenbank](docs/architecture/security.svg)
 
 Die Zugangsmittel stehen bei der zuständigen Komponente oder im zugehörigen Datenbankbereich. Die Tabelle erklärt ihre Speicherdauer. Die Bankanbindung verarbeitet den Authorization Code über die registrierte FinSec-Rückkehr-URL. Den SCA-Ablauf zeigt das [Sequenzdiagramm zur Kontoverknüpfung](docs/user%20account%20link.md).
 
