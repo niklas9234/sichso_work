@@ -1,39 +1,9 @@
 # 2.4 Funktionale Architektur
 
-```mermaid
-flowchart TB
-    subgraph FE["Frontend"]
-        FAuth["Authentifizierung: Anmeldung und Abmeldung"]
-        FAccount["Bankkonto verknüpfen; Kontostand und Transaktionen anzeigen"]
-        FPayment["Überweisung erfassen und Status anzeigen"]
-        FAnalysis["Auswertungen und Sparhinweise anzeigen"]
-    end
+![Funktionale Architektur von FinSec](architecture/functional.svg)
 
-    subgraph BE["Backend"]
-        BAuth["Authentifizierung: Zugangsdaten und Sitzung prüfen"]
-        BAccount["Kontoverwaltung: Konten zuordnen und Finanzdaten abrufen"]
-        BPayment["Zahlungsverwaltung: Aufträge prüfen und weiterleiten"]
-        BAnalysis["Finanzdatenverarbeitung: klassifizieren, aggregieren, analysieren; Sparhinweise erstellen"]
-        BBank["Bankanbindung: Autorisierung, Tokens und Bank-API"]
-        DB[("Datenbank: Nutzer und Passworthashes, Bankverbindungen und Finanzdaten")]
-    end
+Das Frontend nutzt Authentifizierung, Kontoverwaltung, Zahlungsverwaltung und Finanzdatenverarbeitung. Die Fachkomponenten prüfen die FinSec-Sitzung und die Berechtigung für den Vorgang. Die Backend-Komponenten greifen auf die gemeinsame Datenbank zu. Konto- und Zahlungsverwaltung nutzen die Bankanbindung für Aufrufe an EuroTrust.
 
-    Bank["EuroTrust / weitere Banken (extern)"]
+Die gestrichelte Verbindung zeigt die SCA-Weiterleitung im Browser. FinSec liefert die Redirect-URL, der Browser öffnet EuroTrust und Kund:innen melden sich dort bei der Bank an. EuroTrust leitet den Browser anschließend an die registrierte FinSec-Rückkehr-URL zurück.
 
-    FAuth <--> BAuth
-    FAccount <--> BAccount
-    FPayment <--> BPayment
-    FAnalysis <--> BAnalysis
-    BAuth <-->|"FinSec-Login-Daten"| DB
-    BAuth -.->|"Sitzung und Berechtigung prüfen"| BAccount
-    BAuth -.->|"Sitzung und Berechtigung prüfen"| BPayment
-    BAuth -.->|"Sitzung und Berechtigung prüfen"| BAnalysis
-    BAccount <--> BBank
-    BPayment <--> BBank
-    BAccount <--> DB
-    BPayment <--> DB
-    BAnalysis <--> DB
-    BBank <--> DB
-    BBank <--> Bank
-```
-
+Die [Sicherheitsansicht](security_view.md) verfeinert diese Architektur. Die [Diagrammübersicht](architecture/README.md) ordnet die Ansichten und Anwendungsfälle ein.
