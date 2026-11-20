@@ -32,15 +32,15 @@ digraph FinSec {
 
         {rank=same; login; auth}
         {rank=same; analysis; accounts; payments}
-        {rank=same; links; adapter; orders}
+        {rank=same; adapter; orders}
+        {rank=same; links; refresh}
         auth -> login
         auth -> {analysis accounts payments}
         analysis -> accounts [label="Kontodaten für Auswertung"]
-        accounts -> links
-        payments -> links [label="Zuordnung lesen"]
         payments -> orders
         accounts -> adapter [label="Verknüpfen / Abruf"]
         payments -> adapter [label="Zahlung / Status"]
+        adapter -> links
         adapter -> refresh
     }
 
