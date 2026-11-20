@@ -16,39 +16,40 @@ digraph Security {
         style=rounded
         margin=18
 
-        auth [label="Authentifizierung"]
-        accounts [label="Kontoverwaltung"]
+        auth [label="FinSec-Authentifizierung\nAnmeldung und Sitzungsprüfung"]
+        accounts [label="Bankkontenverwaltung"]
         payments [label="Zahlungsverwaltung"]
-        analysis [label="Finanzdatenverarbeitung"]
+        analysis [label="Finanzdatenverarbeitung\nTemporäre Auswertung"]
         adapter [label="Bankanbindung\nClient-ID und Client-Secret\nCompany Token und Customer Token\nAuthorization Code"]
 
         database [shape=plain, label=<
             <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="7" COLOR="#64748b" BGCOLOR="#eff6ff">
-                <TR><TD COLSPAN="6"><B>Datenbank</B></TD></TR>
+                <TR><TD COLSPAN="4"><B>Datenbank</B></TD></TR>
                 <HR/>
                 <TR>
-                    <TD PORT="login">Nutzerdaten und<BR/>Authentifizierung</TD><VR/>
-                    <TD PORT="orders">Zahlungsdaten</TD><VR/>
+                    <TD PORT="login">FinSec-Nutzerkonten<BR/>und Sitzungen</TD><VR/>
+                    <TD PORT="orders">Offene FinSec-<BR/>Zahlungsaufträge</TD><VR/>
                     <TD PORT="consents">Bankverbindungen<BR/>und Einwilligungen</TD><VR/>
-                    <TD PORT="refresh">Customer<BR/>Refresh Token</TD><VR/>
-                    <TD PORT="finance">Finanzdaten</TD><VR/>
-                    <TD PORT="results">Analyseergebnisse</TD>
+                    <TD PORT="refresh">Customer<BR/>Refresh Token</TD>
                 </TR>
             </TABLE>
         >]
 
-        {rank=same; auth; accounts; payments; analysis}
+        {rank=same; accounts; payments; analysis}
+        accounts -> payments [style=invis, weight=10]
+
+        accounts -> auth [style=dotted, constraint=false]
+        payments -> auth [style=dotted, constraint=false]
+        analysis -> auth [style=dotted, constraint=false]
+        analysis -> accounts [label="Kontodaten für Auswertung"]
 
         accounts -> adapter [label="Verknüpfen / Abruf"]
         payments -> adapter [label="Zahlung / Status"]
         adapter -> database:refresh:n [label="Lesen / ersetzen"]
         auth -> database:login:n
         accounts -> database:consents:n
-        accounts -> database:finance:n
         payments -> database:consents:n [label="Lesen"]
         payments -> database:orders:n
-        analysis -> database:finance:n [label="Lesen"]
-        analysis -> database:results:n
     }
 
     frontend -> auth [label="Anmeldung"]

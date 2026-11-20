@@ -16,14 +16,19 @@ digraph Functional {
         style=rounded
         margin=18
 
-        auth [label="Authentifizierung"]
-        accounts [label="Kontoverwaltung"]
+        auth [label="FinSec-Authentifizierung\nAnmeldung und Sitzungsprüfung"]
+        accounts [label="Bankkontenverwaltung"]
         payments [label="Zahlungsverwaltung"]
-        analysis [label="Finanzdatenverarbeitung"]
+        analysis [label="Finanzdatenverarbeitung\nTemporäre Auswertung"]
         adapter [label="Bankanbindung"]
-        database [label="Datenbank", shape=cylinder, style=filled, fillcolor="#eff6ff"]
+        database [label="Datenbank\nFinSec-Nutzerkonten und Sitzungen\nBankverbindungen und Refresh Tokens\nOffene FinSec-Zahlungsaufträge", shape=cylinder, style=filled, fillcolor="#eff6ff"]
 
-        {rank=same; auth; accounts; payments; analysis}
+        {rank=same; accounts; payments; analysis}
+
+        accounts -> auth [style=dotted, constraint=false]
+        payments -> auth [style=dotted, constraint=false]
+        analysis -> auth [style=dotted, constraint=false]
+        analysis -> accounts [label="Kontodaten für Auswertung"]
 
         accounts -> adapter
         payments -> adapter
@@ -31,7 +36,6 @@ digraph Functional {
         auth -> database
         accounts -> database
         payments -> database
-        analysis -> database
     }
 
     frontend -> auth [label="Anmeldung"]
