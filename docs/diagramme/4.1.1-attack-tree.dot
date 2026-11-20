@@ -1,0 +1,77 @@
+digraph AttackTree {
+    graph [
+        rankdir=TB,
+        bgcolor="white",
+        splines=polyline,
+        nodesep=0.3,
+        ranksep=0.55,
+        pad=0.2
+    ]
+    node [
+        shape=box,
+        style="rounded,filled",
+        fillcolor="#f8fafc",
+        color="#64748b",
+        fontname="DejaVu Sans",
+        fontsize=11,
+        margin="0.16,0.10"
+    ]
+    edge [color="#475569", arrowsize=0.65]
+
+    root [
+        label="Unberechtigte Partei erhält\nKontostände oder Transaktionen",
+        fillcolor="#fee2e2"
+    ]
+
+    root_or     [shape=diamond, label="ODER", fillcolor="#e2e8f0"]
+    session_and [shape=diamond, label="UND", fillcolor="#e2e8f0"]
+    session_or  [shape=diamond, label="ODER", fillcolor="#e2e8f0"]
+    access_and  [shape=diamond, label="UND", fillcolor="#e2e8f0"]
+    bank_and    [shape=diamond, label="UND", fillcolor="#e2e8f0"]
+    token_or    [shape=diamond, label="ODER", fillcolor="#e2e8f0"]
+
+    session [label="Abruf unter der Identität\neiner berechtigten Person"]
+    access  [label="FinSec gibt Daten eines\nfremden Kontos zurück"]
+    bank    [label="Unberechtigter Abruf\nüber die EuroTrust-API"]
+
+    session_available [
+        label="Fremde Partei kann die FinSec-Sitzung\ndieser Person nutzen"
+    ]
+    session_scope [
+        label="Die betroffene Bankverbindung ist dieser\nPerson zugeordnet oder für sie freigegeben"
+    ]
+    login [
+        label="Anmeldung mit offengelegten\nFinSec-Zugangsdaten gelingt"
+    ]
+    session_proof [
+        label="Offengelegter Sitzungsnachweis\nist noch gültig"
+    ]
+
+    foreign_account [
+        label="Eine Person fragt mit ihrer eigenen\nSitzung ein fremdes Konto an"
+    ]
+    missing_check [
+        label="FinSec prüft die Kontoberechtigung\nfehlerhaft oder gar nicht"
+    ]
+
+    customer_token [label="Gültiger Customer Token\nfür das Konto verfügbar"]
+    consent        [label="Passende Consent-ID\nist verfügbar"]
+    token_exposed  [label="Gültiger Customer Token\nwird offengelegt"]
+    token_issued   [label="Neuer Customer Token wird\nunberechtigt ausgestellt"]
+
+    root -> root_or
+    root_or -> { session access bank }
+
+    session -> session_and
+    session_and -> { session_available session_scope }
+    session_available -> session_or
+    session_or -> { login session_proof }
+
+    access -> access_and
+    access_and -> { foreign_account missing_check }
+
+    bank -> bank_and
+    bank_and -> { customer_token consent }
+    customer_token -> token_or
+    token_or -> { token_exposed token_issued }
+}
