@@ -1,8 +1,8 @@
-digraph Security {
-    graph [rankdir=TB, splines=polyline, bgcolor="white", pad=0.2, nodesep=0.35, ranksep=1.0,
+digraph FinSec {
+    graph [rankdir=TB, splines=line, bgcolor="white", pad=0.25, nodesep=0.35, ranksep=0.75,
            fontname="DejaVu Sans", label="FinSec · Sicherheitsarchitektur", labelloc=t]
     node [shape=box, style="rounded,filled", fillcolor="#f8fafc", color="#64748b",
-          fontname="DejaVu Sans", fontsize=11, margin="0.16,0.10"]
+          fontname="DejaVu Sans", fontsize=11, margin="0.18,0.12"]
     edge [color="#475569", fontcolor="#334155", fontname="DejaVu Sans", fontsize=10, arrowsize=0.7]
 
     frontend [label="FinSec-Frontend (Browser)"]
@@ -10,52 +10,41 @@ digraph Security {
 
     subgraph cluster_backend {
         label="FinSec-Backend"
-        labelloc=b
         labeljust=l
+        labelloc=b
         color="#94a3b8"
         style=rounded
-        margin=18
+        margin=20
 
-        auth [label="FinSec-Authentifizierung\nAnmeldung und Sitzungsprüfung"]
+        auth [label="FinSec-Anmeldung und Sitzungsprüfung", fillcolor="#eef2ff"]
+        analysis [label="Finanzdatenverarbeitung\nTemporäre Auswertung"]
         accounts [label="Bankkontenverwaltung"]
         payments [label="Zahlungsverwaltung"]
-        analysis [label="Finanzdatenverarbeitung\nTemporäre Auswertung"]
         adapter [label="Bankanbindung\nClient-ID und Client-Secret\nCompany Token und Customer Token\nAuthorization Code"]
 
-        database [shape=plain, label=<
-            <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="7" COLOR="#64748b" BGCOLOR="#eff6ff">
-                <TR><TD COLSPAN="4"><B>Datenbank</B></TD></TR>
-                <HR/>
-                <TR>
-                    <TD PORT="login">FinSec-Nutzerkonten<BR/>und Sitzungen</TD><VR/>
-                    <TD PORT="orders">Offene FinSec-<BR/>Zahlungsaufträge</TD><VR/>
-                    <TD PORT="consents">Bankverbindungen<BR/>und Einwilligungen</TD><VR/>
-                    <TD PORT="refresh">Customer<BR/>Refresh Token</TD>
-                </TR>
-            </TABLE>
-        >]
+        subgraph {
+            node [shape=cylinder, style=filled, fillcolor="#eff6ff"]
+            login [label="FinSec-Nutzerkonten\nund Sitzungen"]
+            links [label="Bankverbindungen\nund Einwilligungen"]
+            orders [label="Offene FinSec-\nZahlungsaufträge"]
+            refresh [label="Customer Refresh Token"]
+        }
 
-        {rank=same; accounts; payments; analysis}
-        accounts -> payments [style=invis, weight=10]
-
-        accounts -> auth [style=dotted, constraint=false]
-        payments -> auth [style=dotted, constraint=false]
-        analysis -> auth [style=dotted, constraint=false]
+        {rank=same; login; auth}
+        {rank=same; analysis; accounts; payments}
+        {rank=same; links; adapter; orders}
+        auth -> login
+        auth -> {analysis accounts payments}
         analysis -> accounts [label="Kontodaten für Auswertung"]
-
+        accounts -> links
+        payments -> links [label="Zuordnung lesen"]
+        payments -> orders
         accounts -> adapter [label="Verknüpfen / Abruf"]
         payments -> adapter [label="Zahlung / Status"]
-        adapter -> database:refresh:n [label="Lesen / ersetzen"]
-        auth -> database:login:n
-        accounts -> database:consents:n
-        payments -> database:consents:n [label="Lesen"]
-        payments -> database:orders:n
+        adapter -> refresh
     }
 
-    frontend -> auth [label="Anmeldung"]
-    frontend -> accounts
-    frontend -> payments
-    frontend -> analysis
-    adapter -> bank [label="Bank-API nach Prüfung"]
-    frontend -> bank [label="SCA im Browser", style=dashed]
+    frontend -> auth [xlabel="Login / Sitzungsnachweis"]
+    adapter -> bank [xlabel="Bank-API nach Prüfung"]
+    frontend -> bank [label="SCA im Browser", style=dashed, weight=12]
 }
