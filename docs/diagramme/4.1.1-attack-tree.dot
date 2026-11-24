@@ -1,77 +1,42 @@
 digraph AttackTree {
-    graph [
-        rankdir=TB,
-        bgcolor="white",
-        splines=polyline,
-        nodesep=0.3,
-        ranksep=0.55,
-        pad=0.2
-    ]
-    node [
-        shape=box,
-        style="rounded,filled",
-        fillcolor="#f8fafc",
-        color="#64748b",
-        fontname="DejaVu Sans",
-        fontsize=11,
-        margin="0.16,0.10"
-    ]
-    edge [color="#475569", arrowsize=0.65]
+    graph [rankdir=TB, bgcolor="white", splines=line, nodesep=0.25, ranksep=0.42, pad=0.2,
+           ordering=out]
+    node [shape=box, style="rounded,filled", fillcolor="#f8fafc", color="#64748b",
+          fontname="DejaVu Sans", fontsize=11, margin="0.12,0.08"]
+    edge [color="#475569", arrowsize=0.6]
 
-    root [
-        label="Unberechtigte Partei erhält\nKontostände oder Transaktionen",
-        fillcolor="#fee2e2"
-    ]
+    root [label="Unberechtigte Partei erhält\nKontostände oder Transaktionen", fillcolor="#fee2e2"]
+    root_gate [shape=diamond, label="ODER", fillcolor="#e2e8f0"]
+    session [label="Fremde FinSec-Sitzung\nfür ein verknüpftes Konto"]
+    session_gate [shape=diamond, label="ODER", fillcolor="#e2e8f0"]
+    login [label="FinSec stellt nach Annahme\nfremdgenutzter Login-Nachweise\neine neue Sitzung aus"]
+    session_proof [label="Ein offengelegter Sitzungsnachweis\nwird noch akzeptiert"]
+    wrong_account [label="FinSec liefert Daten eines\nfremden Bankkontos"]
+    wrong_account_gate [shape=diamond, label="UND", fillcolor="#e2e8f0"]
+    own_session [label="FinSec akzeptiert die eigene Sitzung\nder anfragenden Person"]
+    binding [label="Bankanbindung lässt den Abruf\ntrotz fehlender Kontozuordnung zu"]
+    bank [label="Unberechtigter Abruf\nüber die EuroTrust-API"]
+    bank_gate [shape=diamond, label="UND", fillcolor="#e2e8f0"]
+    customer_token [label="Gültiger Customer Token\nist verfügbar"]
+    customer_token_gate [shape=diamond, label="ODER", fillcolor="#e2e8f0"]
+    exposed_token [label="Ausgestellter Customer Token\nwird offengelegt"]
+    renewal [label="Token-Erneuerung mit\nfremdgenutzten Nachweisen"]
+    renewal_gate [shape=diamond, label="UND", fillcolor="#e2e8f0"]
+    refresh [label="Gültiger Customer Refresh Token\nwird offengelegt"]
+    client [label="FinSec-Client-Zugangsdaten\nwerden offengelegt"]
+    consent [label="Passende gültige Consent-ID\nist verfügbar"]
+    runtime [label="Kontodaten werden beim Abruf\noder bei der Auswertung offengelegt"]
 
-    root_or     [shape=diamond, label="ODER", fillcolor="#e2e8f0"]
-    session_and [shape=diamond, label="UND", fillcolor="#e2e8f0"]
-    session_or  [shape=diamond, label="ODER", fillcolor="#e2e8f0"]
-    access_and  [shape=diamond, label="UND", fillcolor="#e2e8f0"]
-    bank_and    [shape=diamond, label="UND", fillcolor="#e2e8f0"]
-    token_or    [shape=diamond, label="ODER", fillcolor="#e2e8f0"]
-
-    session [label="Abruf unter der Identität\neiner berechtigten Person"]
-    access  [label="FinSec gibt Daten eines\nfremden Kontos zurück"]
-    bank    [label="Unberechtigter Abruf\nüber die EuroTrust-API"]
-
-    session_available [
-        label="Fremde Partei kann die FinSec-Sitzung\ndieser Person nutzen"
-    ]
-    session_scope [
-        label="Die betroffene Bankverbindung ist dieser\nPerson zugeordnet oder für sie freigegeben"
-    ]
-    login [
-        label="Anmeldung mit offengelegten\nFinSec-Zugangsdaten gelingt"
-    ]
-    session_proof [
-        label="Offengelegter Sitzungsnachweis\nist noch gültig"
-    ]
-
-    foreign_account [
-        label="Eine Person fragt mit ihrer eigenen\nSitzung ein fremdes Konto an"
-    ]
-    missing_check [
-        label="FinSec prüft die Kontoberechtigung\nfehlerhaft oder gar nicht"
-    ]
-
-    customer_token [label="Gültiger Customer Token\nfür das Konto verfügbar"]
-    consent        [label="Passende Consent-ID\nist verfügbar"]
-    token_exposed  [label="Gültiger Customer Token\nwird offengelegt"]
-    token_issued   [label="Neuer Customer Token wird\nunberechtigt ausgestellt"]
-
-    root -> root_or
-    root_or -> { session access bank }
-
-    session -> session_and
-    session_and -> { session_available session_scope }
-    session_available -> session_or
-    session_or -> { login session_proof }
-
-    access -> access_and
-    access_and -> { foreign_account missing_check }
-
-    bank -> bank_and
-    bank_and -> { customer_token consent }
-    customer_token -> token_or
-    token_or -> { token_exposed token_issued }
+    root -> root_gate
+    root_gate -> { session wrong_account bank runtime }
+    session -> session_gate
+    session_gate -> { login session_proof }
+    wrong_account -> wrong_account_gate
+    wrong_account_gate -> { own_session binding }
+    bank -> bank_gate
+    bank_gate -> { customer_token consent }
+    customer_token -> customer_token_gate
+    customer_token_gate -> { exposed_token renewal }
+    renewal -> renewal_gate
+    renewal_gate -> { refresh client }
 }
